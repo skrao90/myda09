@@ -463,16 +463,34 @@ function decorateButtons(element) {
  * @param {string} [prefix] prefix to be added to icon src
  * @param {string} [alt] alt text to be added to icon
  */
+
 function decorateIcon(span, prefix = '', alt = '') {
-  const iconName = Array.from(span.classList)
-    .find((c) => c.startsWith('icon-'))
-    .substring(5);
-  const img = document.createElement('img');
-  img.dataset.iconName = iconName;
-  img.src = `${window.hlx.codeBasePath}${prefix}/icons/${iconName}.svg`;
-  img.alt = alt;
-  img.loading = 'lazy';
-  span.append(img);
+  // Check if this is a label (has 'label-' class) or an icon (has 'icon-' class)
+  const isLabel = Array.from(span.classList).some((c) => c.startsWith('label-'));
+
+  if (isLabel) {
+    // Extract label name from class e.g. 'label-new' → 'new'
+    const labelName = Array.from(span.classList)
+      .find((c) => c.startsWith('label-'))
+      .substring(6);
+
+    const label = document.createElement('span');
+    label.className = 'label-text';
+    label.textContent = labelName;
+    span.append(label);
+  } else {
+    // Original icon logic
+    const iconName = Array.from(span.classList)
+      .find((c) => c.startsWith('icon-'))
+      .substring(5);
+
+    const img = document.createElement('img');
+    img.dataset.iconName = iconName;
+    img.src = `${window.hlx.codeBasePath}${prefix}/icons/${iconName}.svg`;
+    img.alt = alt;
+    img.loading = 'lazy';
+    span.append(img);
+  }
 }
 
 /**
