@@ -465,32 +465,15 @@ function decorateButtons(element) {
  */
 
 function decorateIcon(span, prefix = '', alt = '') {
-  // Check if this is a label (has 'label-' class) or an icon (has 'icon-' class)
-  const isLabel = Array.from(span.classList).some((c) => c.startsWith('label-'));
-
-  if (isLabel) {
-    // Extract label name from class e.g. 'label-new' → 'new'
-    const labelName = Array.from(span.classList)
-      .find((c) => c.startsWith('label-'))
-      .substring(6);
-
-    const label = document.createElement('span');
-    label.className = 'label-text';
-    label.textContent = labelName;
-    span.append(label);
-  } else {
-    // Original icon logic
-    const iconName = Array.from(span.classList)
-      .find((c) => c.startsWith('icon-'))
-      .substring(5);
-
-    const img = document.createElement('img');
-    img.dataset.iconName = iconName;
-    img.src = `${window.hlx.codeBasePath}${prefix}/icons/${iconName}.svg`;
-    img.alt = alt;
-    img.loading = 'lazy';
-    span.append(img);
-  }
+  const iconName = Array.from(span.classList)
+    .find((c) => c.startsWith('icon-'))
+    .substring(5);
+  const img = document.createElement('img');
+  img.dataset.iconName = iconName;
+  img.src = `${window.hlx.codeBasePath}${prefix}/icons/${iconName}.svg`;
+  img.alt = alt;
+  img.loading = 'lazy';
+  span.append(img);
 }
 
 /**
@@ -499,11 +482,21 @@ function decorateIcon(span, prefix = '', alt = '') {
  * @param {string} [prefix] prefix to be added to icon the src
  */
 function decorateIcons(element, prefix = '') {
+  // Convert #iconname# text → <span class="icon icon-name">
+  element.querySelectorAll('p, li, td, h1, h2, h3, h4, h5, h6').forEach((el) => {
+    el.innerHTML = el.innerHTML.replace(
+      /#([\w-]+)#/g,
+      '<span class="icon icon-$1"></span>',
+    );
+  });
+
+  // Decorate all icon spans (both pre-existing and newly created)
   const icons = [...element.querySelectorAll('span.icon')];
   icons.forEach((span) => {
     decorateIcon(span, prefix);
   });
 }
+
 
 /**
  * Decorates all sections in a container element.
