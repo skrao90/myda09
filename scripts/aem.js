@@ -463,7 +463,6 @@ function decorateButtons(element) {
  * @param {string} [prefix] prefix to be added to icon src
  * @param {string} [alt] alt text to be added to icon
  */
-
 function decorateIcon(span, prefix = '', alt = '') {
   const iconName = Array.from(span.classList)
     .find((c) => c.startsWith('icon-'))
@@ -482,21 +481,11 @@ function decorateIcon(span, prefix = '', alt = '') {
  * @param {string} [prefix] prefix to be added to icon the src
  */
 function decorateIcons(element, prefix = '') {
-  // Convert #iconname# text → <span class="icon icon-name">
-  element.querySelectorAll('p, li, td, h1, h2, h3, h4, h5, h6').forEach((el) => {
-    el.innerHTML = el.innerHTML.replace(
-      /#([\w-]+)#/g,
-      '<span class="icon icon-$1"></span>',
-    );
-  });
-
-  // Decorate all icon spans (both pre-existing and newly created)
   const icons = [...element.querySelectorAll('span.icon')];
   icons.forEach((span) => {
     decorateIcon(span, prefix);
   });
 }
-
 
 /**
  * Decorates all sections in a container element.
