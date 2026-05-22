@@ -144,7 +144,14 @@ export function sampleRUM(checkpoint, data = {}) {
       ? name.toLowerCase().replace(/[^0-9a-z]/gi, '-').replace(/-+/g, '-').replace(/^-|-$/g, '')
       : '';
   }
-  
+  export async function decorateIcons(element) {
+  // ADD THIS — parse #iconname# into span.icon
+  element.querySelectorAll('p, li, td, h1, h2, h3, h4, h5, h6').forEach((el) => {
+    el.innerHTML = el.innerHTML.replace(
+      /#([\w-]+)#/g,
+      '<span class="icon icon-$1"></span>',
+    );
+  });
   /**
    * Sanitizes a string for use as a js property name.
    * @param {string} name The unsanitized string
