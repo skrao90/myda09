@@ -43,7 +43,7 @@ function getCTAContainer(ctaLink) {
 
 /**
  * Decorates custom label spans based on authoring syntax.
- * Converts [label: Text] into <span class="label-text">Text</span>
+ * Converts #Text# into <span class="label-text">Text</span>
  * @param {Element} main The main element
  */
 export function decorateLabels(main) {
@@ -53,13 +53,18 @@ export function decorateLabels(main) {
   textElements.forEach((el) => {
     // Quick check before running the regex to save processing time
     if (el.innerHTML.includes('#')) {
+      // Regex explanation:
+      // #         : Matches the starting hash
+      // ([^#<]+)  : Captures everything that is NOT a hash or a '<' (prevents crossing into HTML tags)
+      // #         : Matches the closing hash
       el.innerHTML = el.innerHTML.replace(
-        /\[label:\s*(.*?)\]/g, 
+        /#([^#<]+)#/g, 
         (match, textInside) => {
+          const trimmedText = textInside.trim();
           // Format the text for a valid CSS class: lowercase and replace spaces with hyphens
-          const formattedClass = textInside.trim().toLowerCase().replace(/\s+/g, '-');
+          const formattedClass = trimmedText.toLowerCase().replace(/\s+/g, '-');
           
-          return `<span class="label-${formattedClass}">${textInside}</span>`;
+          return `<span class="label-${formattedClass}">${trimmedText}</span>`;
         }
       );
     }
