@@ -40,7 +40,25 @@ function getCTAContainer(ctaLink) {
     ? ctaLink.parentElement.parentElement
     : ctaLink.parentElement;
 }
-
+/**
+ * Decorates custom label spans based on authoring syntax.
+ * Converts [label: Text] into <span class="label">Text</span>
+ * @param {Element} main The main element
+ */
+export function decorateLabels(main) {
+  // Target elements that typically contain inline text
+  const textElements = main.querySelectorAll('p, h1, h2, h3, h4, h5, h6, li');
+  
+  textElements.forEach((el) => {
+    // Quick check before running the regex to save processing time
+    if (el.innerHTML.includes('[label:')) {
+      el.innerHTML = el.innerHTML.replace(
+        /\[label:\s*(.*?)\]/g, 
+        '<span class="label">$1</span>'
+      );
+    }
+  });
+}
 function isCTALinkCheck(ctaLink) {
   const btnContainer = getCTAContainer(ctaLink);
   if (!btnContainer.classList.contains('button-container')) return false;
@@ -851,6 +869,7 @@ export function decorateMain(main, head) {
     decorateExternalImages(main);
   decorateButtons(main);
   decorateIcons(main);
+  decorateLabels(main); // Inject your custom text decorator here
   buildAutoBlocks(main, head);
   decorateSections(main);
   decorateBlocks(main);
