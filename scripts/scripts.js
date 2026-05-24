@@ -52,7 +52,7 @@ export function decorateLabels(main) {
   
   textElements.forEach((el) => {
     // Quick check before running the regex to save processing time
-    if (el.innerHTML.includes('[label:')) {
+    if (el.innerHTML.includes('#')) {
       el.innerHTML = el.innerHTML.replace(
         /\[label:\s*(.*?)\]/g, 
         (match, textInside) => {
