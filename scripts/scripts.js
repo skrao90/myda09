@@ -40,9 +40,10 @@ function getCTAContainer(ctaLink) {
     ? ctaLink.parentElement.parentElement
     : ctaLink.parentElement;
 }
+
 /**
  * Decorates custom label spans based on authoring syntax.
- * Converts [label: Text] into <span class="label">Text</span>
+ * Converts [label: Text] into <span class="label-text">Text</span>
  * @param {Element} main The main element
  */
 export function decorateLabels(main) {
@@ -54,7 +55,12 @@ export function decorateLabels(main) {
     if (el.innerHTML.includes('[label:')) {
       el.innerHTML = el.innerHTML.replace(
         /\[label:\s*(.*?)\]/g, 
-        '<span class="label">$1</span>'
+        (match, textInside) => {
+          // Format the text for a valid CSS class: lowercase and replace spaces with hyphens
+          const formattedClass = textInside.trim().toLowerCase().replace(/\s+/g, '-');
+          
+          return `<span class="label-${formattedClass}">${textInside}</span>`;
+        }
       );
     }
   });
