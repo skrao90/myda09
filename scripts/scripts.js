@@ -64,7 +64,7 @@ export function decorateLabels(main) {
           // Format the text for a valid CSS class: lowercase and replace spaces with hyphens
           const formattedClass = trimmedText.toLowerCase().replace(/\s+/g, '-');
           
-          return `<span class="label-${formattedClass}">${trimmedText}</span>`;
+          return `<span class="tag--label-${formattedClass}">${trimmedText}</span>`;
         }
       );
     }
