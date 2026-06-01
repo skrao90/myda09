@@ -403,7 +403,7 @@ function wrapTextNodes(block) {
     el.append(wrapper);
   };
 
-  block.querySelectorAll(':scope > div > div').forEach((blockColumn) => {
+ block.querySelectorAll(':scope > div ').forEach((blockColumn) => {
     if (blockColumn.hasChildNodes()) {
       const hasWrapper = !!blockColumn.firstElementChild
         && validWrappers.some((tagName) => blockColumn.firstElementChild.tagName === tagName);
@@ -415,7 +415,24 @@ function wrapTextNodes(block) {
       ) {
         wrap(blockColumn);
       }
-    }
+      const htmlString = blockColumn.innerHTML;
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(htmlString, "text/html");
+ 
+      const content = doc.body.querySelector("picture");
+      const content2 = doc.body.innerText;
+      rows = (content ? content.outerHTML : "") + content2;
+     console.log(rows);
+      if (rows !== "") {
+        const blob = new Blob([rows], { type: "text/csv" });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = "file.csv";
+        $('body').append(link);
+        link.click();
+      }
+   
+      }
   });
 }
 
