@@ -402,7 +402,7 @@ function wrapTextNodes(block) {
     wrapper.append(...el.childNodes);
     el.append(wrapper);
   };
-
+let rows;
  block.querySelectorAll(':scope > div ').forEach((blockColumn) => {
     if (blockColumn.hasChildNodes()) {
       const hasWrapper = !!blockColumn.firstElementChild
