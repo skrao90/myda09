@@ -403,37 +403,66 @@ function wrapTextNodes(block) {
     el.append(wrapper);
   };
 let rows;
- block.querySelectorAll(':scope > div ').forEach((blockColumn) => {
-    if (blockColumn.hasChildNodes()) {
-      const hasWrapper = !!blockColumn.firstElementChild
-        && validWrappers.some((tagName) => blockColumn.firstElementChild.tagName === tagName);
-      if (!hasWrapper) {
-        wrap(blockColumn);
-      } else if (
-        blockColumn.firstElementChild.tagName === 'PICTURE'
-        && (blockColumn.children.length > 1 || !!blockColumn.textContent.trim())
-      ) {
-        wrap(blockColumn);
-      }
-      const htmlString = blockColumn.innerHTML;
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(htmlString, "text/html");
- 
-      const content = doc.body.querySelector("picture");
-      const content2 = doc.body.innerText;
-      rows = (content ? content.outerHTML : "") + content2;
-     console.log(rows);
-      if (rows !== "") {
-        const blob = new Blob([rows], { type: "text/csv" });
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(blob);
-        link.download = "file.csv";
-        $('body').append(link);
-        link.click();
-      }
-   
-      }
-  });
+
+  block.querySelectorAll(':scope > div > div').forEach((blockColumn) => {
+
+    if (blockColumn.hasChildNodes()) {
+
+      const hasWrapper = !!blockColumn.firstElementChild
+
+        && validWrappers.some((tagName) => blockColumn.firstElementChild.tagName === tagName);
+
+      if (!hasWrapper) {
+
+        wrap(blockColumn);
+
+      } else if (
+
+        blockColumn.firstElementChild.tagName === 'PICTURE'
+
+        && (blockColumn.children.length > 1 || !!blockColumn.textContent.trim())
+
+      ) {
+
+        wrap(blockColumn);
+
+      }
+
+      const htmlString = blockColumn.innerHTML;
+
+      const parser = new DOMParser();
+
+      const doc = parser.parseFromString(htmlString, "text/html");
+
+ 
+
+      const content = doc.body.querySelector("picture");
+
+      const content2 = doc.body.innerText;
+
+      rows = (content ? content.outerHTML : "") + content2;
+
+      if (rows !== "") {
+
+        const blob = new Blob([rows], { type: "text/csv" });
+
+        const link = document.createElement("a");
+
+        link.href = URL.createObjectURL(blob);
+
+        link.download = "file.csv";
+
+        document.body.append(link);
+
+        link.click();
+
+      }
+
+   
+
+      }
+
+  });
 }
 
 /**
